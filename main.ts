@@ -1,45 +1,50 @@
-input.onButtonPressed(Button.A, function () {
-    pins.digitalWritePin(DigitalPin.P1, 1)
-    pins.digitalWritePin(DigitalPin.P2, 1)
-    basic.showIcon(IconNames.Square)
-    music.playTone(262, music.beat(BeatFraction.Whole))
+radio.onReceivedNumber(function (receivedNumber) {
+    luzremoto = receivedNumber
+    music.playTone(349, music.beat(BeatFraction.Eighth))
 })
-input.onButtonPressed(Button.AB, function () {
-    pins.digitalWritePin(DigitalPin.P1, 0)
-    pins.digitalWritePin(DigitalPin.P2, 0)
+let luzlocal = 0
+let luzremoto = 0
+radio.setGroup(1)
+radio.setTransmitPower(7)
+loops.everyInterval(1000, function () {
+    luzlocal = input.lightLevel()
+    radio.sendNumber(luzlocal)
     basic.showLeds(`
+        # . . . .
         . . . . .
+        # . . . .
         . . . . .
-        . . # . .
-        . . . . .
-        . . . . .
+        # . . . .
         `)
-    music.playTone(440, music.beat(BeatFraction.Whole))
-})
-input.onButtonPressed(Button.B, function () {
-    pins.digitalWritePin(DigitalPin.P1, 1)
-    pins.digitalWritePin(DigitalPin.P2, 0)
-    basic.showIcon(IconNames.SmallSquare)
-    music.playTone(349, music.beat(BeatFraction.Whole))
-})
-loops.everyInterval(60000, function () {
-    if (input.lightLevel() <= 100) {
+    if (luzlocal <= 100 && luzremoto <= 100) {
         pins.digitalWritePin(DigitalPin.P1, 1)
         pins.digitalWritePin(DigitalPin.P2, 1)
-        basic.showIcon(IconNames.Diamond)
-    } else if (input.lightLevel() <= 200) {
+        basic.showLeds(`
+            # . # . #
+            . . # . #
+            # . # . #
+            . . # . #
+            # . # . #
+            `)
+    } else if (luzlocal <= 200 && luzremoto <= 200) {
         pins.digitalWritePin(DigitalPin.P1, 1)
         pins.digitalWritePin(DigitalPin.P2, 0)
-        basic.showIcon(IconNames.SmallDiamond)
+        basic.showLeds(`
+            # . # . .
+            . . # . .
+            # . # . #
+            . . # . #
+            # . # . #
+            `)
     } else {
         pins.digitalWritePin(DigitalPin.P1, 0)
         pins.digitalWritePin(DigitalPin.P2, 0)
         basic.showLeds(`
+            # . . . .
             . . . . .
+            # . . . .
             . . . . .
-            . . # . .
-            . . . . .
-            . . . . .
+            # . # . #
             `)
     }
 })
