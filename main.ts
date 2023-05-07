@@ -1,16 +1,18 @@
-radio.onReceivedNumber(function (receivedNumber) {
+radio.onReceivedNumber(function on_received_number(receivedNumber: number) {
     pins.digitalWritePin(DigitalPin.P0, 1)
     game.gameOver()
 })
-input.onButtonPressed(Button.A, function () {
+input.onButtonPressed(Button.A, function on_button_pressed_a() {
+    
     canal = canal - 1
     radio.setGroup(canal)
     basic.showNumber(canal)
 })
-input.onButtonPressed(Button.AB, function () {
+input.onButtonPressed(Button.AB, function on_button_pressed_ab() {
     radio.sendNumber(canal)
 })
-input.onButtonPressed(Button.B, function () {
+input.onButtonPressed(Button.B, function on_button_pressed_b() {
+    
     canal = canal + 1
     radio.setGroup(canal)
     basic.showNumber(canal)
