@@ -102,7 +102,7 @@ export default class maquete extends Phaser.Scene {
     ];
 
     this.luzes.forEach((luz) => {
-      let topic = "estado/casa/" + luz.numero + "/luz";
+      let topic = "estado/" + luz.numero + "/0";
 
       luz.botao = this.add
         .sprite(luz.x, luz.y, "moeda", 0)
@@ -121,7 +121,7 @@ export default class maquete extends Phaser.Scene {
     this.cliente_mqtt.on("message", (topic, message) => {
       let comando = message.toString();
       this.luzes.forEach((luz) => {
-        if (topic === "estado/casa/" + luz.numero + "/luz") {
+        if (topic === "estado/" + luz.numero + "/0") {
           if (comando === "0") {
             luz.botao.play("moeda-parada");
           } else if (comando === "1") {

@@ -4,15 +4,15 @@ Projeto de condomínio de casas inteligentes.
 
 ## Níveis de controle
 
-- Bairro:
-  - Iluminação pública (`postes`): valor `0` para desligado e `1` para ligado.
-- Casas:
-  - Iluminação (`luz`): valor `0` para desligado e `1` para ligado.
+Cada cada da maquete possui um Micro:bit para chaveamento de 3 circuitos:
+
+- Iluminação pública (circuito `0`): valor `0` para desligado e `1` para ligado.
+- Iluminação (circuitos `1`, e `2`): valor `0` para desligado e `1` para ligado.
 
 O protocolo MQTT será usado neste projeto, pois:
 
 - Possui sistema de mensagens PubSub para assinaturas e notificações.
-- Cada sensor ou atuador pode ter tópico específico, hierarquizado, para permitir diversos formatos de assinatura: `estado/#`, `estado/casa/0/luz` etc.
+- Cada sensor ou atuador pode ter tópico específico, hierarquizado, para permitir diversos formatos de assinatura: `estado/#`, `estado/0/0` etc.
 - Permite um sistema interno de mensagens para solicitar, entre outros, o estado completo do bairro.
 
 Exemplo: o operador do sistema poderá solicitar uma sincronização do seu aplicativo cliente (celular) com o estado atual do bairro. Ele envia uma mensagem:
@@ -24,11 +24,10 @@ mensagem: enviar_estado_completo
 E receberá, em cada assinatura, a atualização específica:
 
 ```
-estado/bairro/postes: 0
-estado/casa/0/luz: 1
-estado/casa/1/luz: 1
-estado/casa/2/luz: 0
-estado/casa/...
+estado/0/0: 1
+estado/0/1: 1
+estado/0/1: 0
+estado/...
 ```
 
 Logo, poderá haverá várias interfaces de operador, com mais ou menos informação em relação as casas. Nota: ao todo são 12 casas, mas para facilitar a leitura serão apresentadas até o `2` seguido de `...`.
@@ -39,24 +38,17 @@ mindmap
     mensagem
       "enviar_estado_completo"
     estado
-      /bairro
-        /postes
+      /0
+        /0
           "0"
           "1"
-      /casa
-        /0
-          luz
-            "0"
-            "1"
         /1
-          /luz
-            "0"
-            "1"
+          "0"
+          "1"
         /2
-          /luz
-            "0"
-            "1"
-        ...
+          "0"
+          "1"
+      ...
 ```
 
 ## Trocas de mensagens
@@ -69,11 +61,10 @@ Ao iniciar o sistema de controle, é preciso atualizar os assinantes, de forma a
 
 ```mermaid
 sequenceDiagram
-Controle ->> Nuvem: [PUBLISH (1)] estado/bairro/postes: 0
-Controle ->> Nuvem: [PUBLISH (1)] estado/casa/0/luz: 1
-Controle ->> Nuvem: [PUBLISH (1)] estado/casa/1/luz: 1
-Controle ->> Nuvem: [PUBLISH (1)] estado/casa/2/luz: 0
-Controle ->> Nuvem: [PUBLISH (1)] estado/casa/...
+Controle ->> Nuvem: [PUBLISH (1)] estado/0/0: 1
+Controle ->> Nuvem: [PUBLISH (1)] estado/0/1: 1
+Controle ->> Nuvem: [PUBLISH (1)] estado/0/2: 0
+Controle ->> Nuvem: [PUBLISH (1)] estado/...
 ```
 
 ### Entrada do operador (usuário) no sistema
@@ -85,16 +76,14 @@ sequenceDiagram
 Operador ->> Nuvem: [SUBSCRIBE] estado/#
 Operador ->>+ Nuvem: [PUBLISH (2)] mensagem: enviar_estado_completo
 Nuvem ->>- Controle: [NOTIFY (2)] mensagem: enviar_estado_completo
-Controle ->>+ Nuvem: [PUBLISH (1)] estado/bairro/postes: 0
-Nuvem ->>- Operador: [NOTIFY (1)] estado/bairro/postes: 0
-Controle ->>+ Nuvem: [PUBLISH (1)] estado/casa/0/luz: 1
-Nuvem ->>- Operador: [NOTIFY (1)] estado/casa/0/luz: 1
-Controle ->>+ Nuvem: [PUBLISH (1)] estado/casa/1/luz: 1
-Nuvem ->>- Operador: [NOTIFY (1)] estado/casa/1/luz: 1
-Controle ->>+ Nuvem: [PUBLISH (1)] estado/casa/2/luz: 0
-Nuvem ->>- Operador: [NOTIFY (1)] estado/casa/2/luz: 0
-Controle ->>+ Nuvem: [PUBLISH (1)] estado/casa/...
-Nuvem ->>- Operador: [NOTIFY (1)] estado/casa/...
+Controle ->>+ Nuvem: [PUBLISH (1)] estado/0/0: 1
+Nuvem ->>- Operador: [NOTIFY (1)] estado/0/0: 1
+Controle ->>+ Nuvem: [PUBLISH (1)] estado/0/1: 1
+Nuvem ->>- Operador: [NOTIFY (1)] estado/0/1: 1
+Controle ->>+ Nuvem: [PUBLISH (1)] estado/0/2: 0
+Nuvem ->>- Operador: [NOTIFY (1)] estado/0/2: 0
+Controle ->>+ Nuvem: [PUBLISH (1)] estado/...
+Nuvem ->>- Operador: [NOTIFY (1)] estado/...
 ```
 
 ### Atualização de estado por ação de operador
@@ -103,8 +92,8 @@ Assim como no primeiro caso, mensagens idempotentes têm QoS 1:
 
 ```mermaid
 sequenceDiagram
-Operador ->>+ Nuvem: [PUBLISH (1)] estado/casa/0/luz: 0
-Nuvem ->>- Controle: [NOTIFY (1)] estado/casa/0/luz: 0
+Operador ->>+ Nuvem: [PUBLISH (1)] estado/0/0: 1
+Nuvem ->>- Controle: [NOTIFY (1)] estado/0/0: 1
 ```
 
 O controle enviará, na sequência, o comando de desligar a luz para o atuador da casa `0`.
@@ -120,6 +109,6 @@ Na sequência, o controle é notificado e envia a atualização para os assinant
 
 ```mermaid
 sequenceDiagram
-Controle ->>+ Nuvem: [PUBLISH (1)] estado/casa/0/luz: 0
-Nuvem ->>- Operador: [NOTIFY (1)] estado/casa/0/luz: 0
+Controle ->>+ Nuvem: [PUBLISH (1)] estado/0/0: 1
+Nuvem ->>- Operador: [NOTIFY (1)] estado/0/0: 1
 ```
