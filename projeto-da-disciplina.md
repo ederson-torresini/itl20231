@@ -36,18 +36,17 @@ Logo, poderá haverá várias interfaces de operador, com mais ou menos informa�
 mindmap
   root((Tópicos))
     mensagem
-      "enviar_estado_completo"
+      enviar_estado_completo
+    atualizar
+      /0
+        /0
+        /1
+        /2
     estado
       /0
         /0
-          "0"
-          "1"
         /1
-          "0"
-          "1"
         /2
-          "0"
-          "1"
       ...
 ```
 
@@ -92,8 +91,8 @@ Assim como no primeiro caso, mensagens idempotentes têm QoS 1:
 
 ```mermaid
 sequenceDiagram
-Operador ->>+ Nuvem: [PUBLISH (1)] estado/0/0: 1
-Nuvem ->>- Controle: [NOTIFY (1)] estado/0/0: 1
+Operador ->>+ Nuvem: [PUBLISH (1)] atualizar/0/0: 1
+Nuvem ->>- Controle: [NOTIFY (1)] atualizar/0/0: 1
 ```
 
 O controle enviará, na sequência, o comando de desligar a luz para o atuador da casa `0`.
@@ -109,6 +108,6 @@ Na sequência, o controle é notificado e envia a atualização para os assinant
 
 ```mermaid
 sequenceDiagram
-Controle ->>+ Nuvem: [PUBLISH (1)] estado/0/0: 1
-Nuvem ->>- Operador: [NOTIFY (1)] estado/0/0: 1
+Controle ->>+ Nuvem: [PUBLISH (1)] atualizar/0/0: 1
+Nuvem ->>- Operador: [NOTIFY (1)] atualizar/0/0: 1
 ```

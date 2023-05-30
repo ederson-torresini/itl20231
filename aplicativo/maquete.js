@@ -102,7 +102,7 @@ export default class maquete extends Phaser.Scene {
     ];
 
     this.luzes.forEach((luz) => {
-      let topic = "estado/" + luz.numero + "/0";
+      let topic = "atualizar/" + luz.numero + "/0";
 
       luz.botao = this.add
         .sprite(luz.x, luz.y, "moeda", 0)

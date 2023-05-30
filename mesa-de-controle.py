@@ -4,6 +4,7 @@ import serial
 import paho.mqtt.client as mqtt
 import re
 
+
 def main():
     serial_port = getenv("SERIAL_PORT", default="/dev/ttyACM0")
     serial_speed = getenv("SERIAL_SPEED", default="115200")
@@ -38,22 +39,23 @@ def main():
     def on_connect(client, userdata, flags, rc):
         print("Conectado ao servidor MQTT!")
         mqtt_cliente.subscribe("mensagem/#")
-        mqtt_cliente.subscribe("estado/#")
+        mqtt_cliente.subscribe("atualizar/#")
 
     def on_message(client, userdata, msg):
         payload = msg.payload.decode()
-        estados = re.compile("estado\/1?[0-9]\/[0-2]")
+        atualizar = re.compile("atualizar\/1?[0-9]\/[0-2]")
         if payload == "enviar_estado_completo":
             for index, values in casas.items():
                 for key, value in values.items():
                     mqtt_cliente.publish(
                         "".join(["estado/", index, "/", key]), value, 1
                     )
-        elif estados.match(msg.topic):
+        elif atualizar.match(msg.topic):
             topic = msg.topic.split("/")
             casa = topic[1]
             luz = topic[2]
             casas[casa][luz] = int(payload)
+            mqtt_cliente.publish("".join(["estado/", casa, "/", luz]), payload, 1)
             if microbit:
                 microbit.write("".join([casa, luz]).encode())
             else:
