@@ -12,13 +12,13 @@ Projeto de condomínio de casas inteligentes.
 O protocolo MQTT será usado neste projeto, pois:
 
 - Possui sistema de mensagens PubSub para assinaturas e notificações.
-- Cada sensor ou atuador pode ter tópico específico, hierarquizado, para permitir diversos formatos de assinatura: `estado/*`, `estado/casa/0/luz` etc.
+- Cada sensor ou atuador pode ter tópico específico, hierarquizado, para permitir diversos formatos de assinatura: `estado/#`, `estado/casa/0/luz` etc.
 - Permite um sistema interno de mensagens para solicitar, entre outros, o estado completo do bairro.
 
 Exemplo: o operador do sistema poderá solicitar uma sincronização do seu aplicativo cliente (celular) com o estado atual do bairro. Ele envia uma mensagem:
 
 ```
-mensagem: informar_estado_completo
+mensagem: enviar_estado_completo
 ```
 
 E receberá, em cada assinatura, a atualização específica:
@@ -31,13 +31,13 @@ estado/casa/2/luz: 0
 estado/casa/...
 ```
 
-Logo, poderá haverá várias interfaces de operador, com mais ou menos informação em relação as casas. Nota: ao todo são 13 casas, mas para facilitar a leitura serão apresentadas até o `2` seguido de `...`.
+Logo, poderá haverá várias interfaces de operador, com mais ou menos informação em relação as casas. Nota: ao todo são 12 casas, mas para facilitar a leitura serão apresentadas até o `2` seguido de `...`.
 
 ```mermaid
 mindmap
   root((Tópicos))
     mensagem
-      "informar_estado_completo"
+      "enviar_estado_completo"
     estado
       /bairro
         /postes
@@ -78,11 +78,11 @@ Controle ->> Nuvem: [PUBLISH (1)] estado/casa/...
 
 ### Entrada do operador (usuário) no sistema
 
-Assim que o operador inicia o aplicativo, é preciso receber todos os estados para apresentar a tela de controle do cenário. Logo, o primeiro passo é assinar (`MQTT Subscribe`) todos os estados (árvore de tópicos `estado/*`) para recebê-los na sequência. Assim como o caso anterior, o QoS 1 é suficiente para o envio dos estados. Porém, para evitar o envio desnecessário do estado completo múltiplas vezes, a solicitação deve ter QoS 2.
+Assim que o operador inicia o aplicativo, é preciso receber todos os estados para apresentar a tela de controle do cenário. Logo, o primeiro passo é assinar (`MQTT Subscribe`) todos os estados (árvore de tópicos `estado/#`) para recebê-los na sequência. Assim como o caso anterior, o QoS 1 é suficiente para o envio dos estados. Porém, para evitar o envio desnecessário do estado completo múltiplas vezes, a solicitação deve ter QoS 2.
 
 ```mermaid
 sequenceDiagram
-Operador ->> Nuvem: [SUBSCRIBE] estado/*
+Operador ->> Nuvem: [SUBSCRIBE] estado/#
 Operador ->>+ Nuvem: [PUBLISH (2)] mensagem: enviar_estado_completo
 Nuvem ->>- Controle: [NOTIFY (2)] mensagem: enviar_estado_completo
 Controle ->>+ Nuvem: [PUBLISH (1)] estado/bairro/postes: 0

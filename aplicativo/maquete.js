@@ -12,6 +12,12 @@ export default class maquete extends Phaser.Scene {
 
   create() {
     this.cliente_mqtt = mqtt.connect("wss://ifsc.digital/ws/");
+    this.cliente_mqtt.on("connect", () => {
+      this.cliente_mqtt.subscribe("estado/#");
+      this.cliente_mqtt.publish("mensagem", "enviar_estado_completo", {
+        qos: 1,
+      });
+    });
 
     this.anims.create({
       key: "moeda-parada",
@@ -97,7 +103,6 @@ export default class maquete extends Phaser.Scene {
 
     this.luzes.forEach((luz) => {
       let topic = "estado/casa/" + luz.numero + "/luz";
-      this.cliente_mqtt.subscribe(topic);
 
       luz.botao = this.add
         .sprite(luz.x, luz.y, "moeda", 0)
@@ -106,9 +111,9 @@ export default class maquete extends Phaser.Scene {
         .on("pointerdown", () => {
           let animacao = luz.botao.anims.getName();
           if (animacao === "moeda-parada") {
-            this.cliente_mqtt.publish(topic, "1");
+            this.cliente_mqtt.publish(topic, "1", {qos: 1});
           } else if (animacao === "moeda-girando") {
-            this.cliente_mqtt.publish(topic, "0");
+            this.cliente_mqtt.publish(topic, "0", { qos: 1 });
           }
         });
     });
