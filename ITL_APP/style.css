@@ -1,0 +1,75 @@
+@font-face {
+    font-family: "Upheaval";
+    src: url("font/upheavtt.ttf");
+}
+
+body{
+    background-color: rgb(39, 38, 38);
+}
+
+div{
+    margin-top: 15vh;
+    height: 80vh;
+    justify-content: center;
+    text-align: center;
+    gap: 50px;
+}
+.font{
+    font-family: "Upheaval";
+    color: white;
+    letter-spacing: 2px;
+    font-size: 3em;
+}
+
+.container img{
+    margin-top: 15vh;
+    width: 6em;
+    image-rendering: pixelated;
+}
+
+figure a:hover img {
+    filter: brightness(0.7);
+}
+img:hover{
+    filter: brightness(0.7);
+}
+
+.img-i2-1{
+    margin-top: 10em;
+    width: 15em; 
+    margin-right: 10px;
+    image-rendering: pixelated;
+}
+.img-i2-2{
+    width: 15em;
+    image-rendering: pixelated;
+}
+
+.fig1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-55%, -100%);
+    color: black; /* Cor do texto */
+    padding: 10px 10px;
+    font-family: "Upheaval";
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .fig2{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-55%, -60%);
+    color: black; /* Cor do texto */
+    padding: 10px 20px;
+    font-family: "Upheaval";
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .sla{
+    transform: translate(-0.2%, 0%);
+  }
+
