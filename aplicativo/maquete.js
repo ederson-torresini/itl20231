@@ -13,8 +13,8 @@ export default class maquete extends Phaser.Scene {
   create() {
     this.cliente_mqtt = mqtt.connect("wss://ifsc.digital/ws/");
     this.cliente_mqtt.on("connect", () => {
-      this.cliente_mqtt.subscribe("estado/#");
-      this.cliente_mqtt.publish("mensagem", "enviar_estado_completo", {
+      this.cliente_mqtt.subscribe("itl20231/estado/#");
+      this.cliente_mqtt.publish("itl20231/mensagem", "enviar_estado_completo", {
         qos: 1,
       });
     });
@@ -102,7 +102,7 @@ export default class maquete extends Phaser.Scene {
     ];
 
     this.luzes.forEach((luz) => {
-      let topic = "atualizar/" + luz.numero + "/0";
+      let topic = "itl20231/atualizar/" + luz.numero + "/0";
 
       luz.botao = this.add
         .sprite(luz.x, luz.y, "moeda", 0)
@@ -121,7 +121,7 @@ export default class maquete extends Phaser.Scene {
     this.cliente_mqtt.on("message", (topic, message) => {
       let comando = message.toString();
       this.luzes.forEach((luz) => {
-        if (topic === "estado/" + luz.numero + "/0") {
+        if (topic === "itl20231/estado/" + luz.numero + "/0") {
           if (comando === "0") {
             luz.botao.play("moeda-parada");
           } else if (comando === "1") {
