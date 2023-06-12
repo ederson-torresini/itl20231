@@ -50,7 +50,7 @@ def main():
                 "".join(["itl20231/estado/", casa, "/", circuito]), payload, 1
             )
             if microbit:
-                microbit.write("".join([casa, circuito]).encode())
+                microbit.write("".join([casa, circuito, "\n"]).encode())
             else:
                 print("".join([casa, circuito]))
 
