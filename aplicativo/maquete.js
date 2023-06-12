@@ -38,97 +38,120 @@ export default class maquete extends Phaser.Scene {
       repeat: -1,
     });
 
-    this.luzes = [
+    this.casas = [
       {
         numero: "1",
         x: 112,
         y: 64,
+        circuitos: []
       },
       {
         numero: "2",
         x: 112,
         y: 128,
+        circuitos: []
       },
       {
         numero: "3",
         x: 112,
         y: 192,
+        circuitos: []
       },
       {
         numero: "4",
         x: 112,
         y: 256,
+        circuitos: []
       },
       {
         numero: "5",
         x: 112,
         y: 320,
+        circuitos: []
       },
       {
         numero: "6",
         x: 112,
         y: 384,
+        circuitos: []
       },
       {
         numero: "7",
         x: 337,
         y: 64,
+        circuitos: []
       },
       {
         numero: "8",
         x: 337,
         y: 128,
+        circuitos: []
       },
       {
         numero: "9",
         x: 337,
         y: 192,
+        circuitos: []
       },
       {
         numero: "10",
         x: 337,
         y: 256,
+        circuitos: []
       },
       {
         numero: "11",
         x: 337,
         y: 320,
+        circuitos: []
       },
       {
         numero: "12",
         x: 337,
         y: 384,
+        circuitos: []
       },
     ];
 
-    this.luzes.forEach((luz) => {
-      let topic = "itl20231/atualizar/" + luz.numero + "/0";
+    this.casas.forEach((casa) => {
+      [0, 1, 2].forEach((circuito) => {
+        let topic = "itl20231/atualizar/" + casa.numero + "/" + circuito;
 
-      luz.botao = this.add
-        .sprite(luz.x, luz.y, "moeda", 0)
-        .play("moeda-parada")
-        .setInteractive()
-        .on("pointerdown", () => {
-          let animacao = luz.botao.anims.getName();
-          if (animacao === "moeda-parada") {
-            this.cliente_mqtt.publish(topic, "1", {qos: 1});
-          } else if (animacao === "moeda-girando") {
-            this.cliente_mqtt.publish(topic, "0", { qos: 1 });
-          }
-        });
+        let x
+        if (casa.numero <= 6)
+          x = casa.x - circuito * 48
+        else
+          x = casa.x + circuito * 48
+
+        casa.circuitos[circuito] = this.add
+          .sprite(x, casa.y, "moeda", 0)
+          .play("moeda-parada")
+          .setInteractive()
+          .on("pointerdown", () => {
+            let animacao = casa.circuitos[circuito].anims.getName();
+            if (animacao === "moeda-parada") {
+              this.cliente_mqtt.publish(topic, "1", { qos: 1 });
+            } else if (animacao === "moeda-girando") {
+              this.cliente_mqtt.publish(topic, "0", { qos: 1 });
+            }
+          });
+      })
     });
 
     this.cliente_mqtt.on("message", (topic, message) => {
       let comando = message.toString();
-      this.luzes.forEach((luz) => {
-        if (topic === "itl20231/estado/" + luz.numero + "/0") {
-          if (comando === "0") {
-            luz.botao.play("moeda-parada");
-          } else if (comando === "1") {
-            luz.botao.play("moeda-girando");
+
+      this.casas.forEach((casa) => {
+        [0, 1, 2].forEach((circuito) => {
+          if (topic === "itl20231/estado/" + casa.numero + "/" + circuito) {
+            if (comando === "0") {
+              casa.circuitos[circuito].play("moeda-parada");
+            } else if (comando === "1") {
+              casa.circuitos[circuito].play("moeda-girando");
+            }
+            return;
           }
-          return;
-        }
+        })
       });
     });
   }
