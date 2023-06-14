@@ -18,7 +18,7 @@ def main():
         for casa in range(1, casas + 1):
             for circuito in range(0, circuitos):
                 redis_cliente.set(str(casa) + str(circuito), "0")
-               
+
     redis_cliente = redis.Redis(host=redis_host, port=redis_port, decode_responses=True)
     redis_init()
     print("Alterados os valores dos circuitos para zero.")
