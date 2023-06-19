@@ -146,9 +146,9 @@ export default class maquete extends Phaser.Scene {
           const ativar = desativar + 1
 
           if (topico === 'itl20231/estado/' + casa.numero + '/' + circuito) {
-            if (comando === desativar) {
+            if (comando === desativar.toString()) {
               casa.circuitos[circuito].play('moeda-parada')
-            } else if (comando === ativar) {
+            } else if (comando === ativar.toString()) {
               casa.circuitos[circuito].play('moeda-girando')
             }
           }
