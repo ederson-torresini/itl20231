@@ -114,8 +114,10 @@ export default class maquete extends Phaser.Scene {
     ]
 
     this.casas.forEach((casa) => {
-      [0, 1, 2].forEach((circuito) => {
-        const topic = 'itl20231/atualizar/' + casa.numero + '/' + circuito
+      [0, 1, 2].forEach((circuito, indice) => {
+        const topico = 'itl20231/atualizar/' + casa.numero + '/' + circuito
+        const desativar = indice * 2
+        const ativar = desativar + 1
 
         let x
         if (casa.numero <= 6) { x = casa.x - circuito * 48 } else { x = casa.x + circuito * 48 }
@@ -127,23 +129,26 @@ export default class maquete extends Phaser.Scene {
           .on('pointerdown', () => {
             const animacao = casa.circuitos[circuito].anims.getName()
             if (animacao === 'moeda-parada') {
-              this.cliente_mqtt.publish(topic, '1', { qos: 1 })
+              this.cliente_mqtt.publish(topico, ativar.toString(), { qos: 1 })
             } else if (animacao === 'moeda-girando') {
-              this.cliente_mqtt.publish(topic, '0', { qos: 1 })
+              this.cliente_mqtt.publish(topico, desativar.toString(), { qos: 1 })
             }
           })
       })
     })
 
-    this.cliente_mqtt.on('message', (topic, message) => {
-      const comando = message.toString()
+    this.cliente_mqtt.on('message', (topico, mensagem) => {
+      const comando = mensagem.toString()
 
       this.casas.forEach((casa) => {
-        [0, 1, 2].forEach((circuito) => {
-          if (topic === 'itl20231/estado/' + casa.numero + '/' + circuito) {
-            if (comando === '0') {
+        [0, 1, 2].forEach((circuito, indice) => {
+          const desativar = indice * 2
+          const ativar = desativar + 1
+
+          if (topico === 'itl20231/estado/' + casa.numero + '/' + circuito) {
+            if (comando === desativar) {
               casa.circuitos[circuito].play('moeda-parada')
-            } else if (comando === '1') {
+            } else if (comando === ativar) {
               casa.circuitos[circuito].play('moeda-girando')
             }
           }
