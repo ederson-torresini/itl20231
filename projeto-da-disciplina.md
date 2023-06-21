@@ -4,15 +4,12 @@ Projeto de condomínio de casas inteligentes.
 
 ## Níveis de controle
 
-Cada cada da maquete possui um Micro:bit para chaveamento de 3 circuitos:
-
-- Iluminação pública (circuito `0`): valor `0` para desligado e `1` para ligado.
-- Iluminação (circuitos `1`, e `2`): valor `0` para desligado e `1` para ligado.
+Cada cada da maquete possui um Micro:bit para controle da cada inteligente. São possíveis até 10 comandos, de `0` a `9`.
 
 O protocolo MQTT será usado neste projeto, pois:
 
 - Possui sistema de mensagens PubSub para assinaturas e notificações.
-- Cada sensor ou atuador pode ter tópico específico, hierarquizado, para permitir diversos formatos de assinatura: `itl20231/estado/#`, `itl20231/estado/0/0` etc.
+- Cada sensor ou atuador pode ter tópico específico, hierarquizado, para permitir diversos formatos de assinatura: `itl20231/estado/#`, `itl20231/estado/0` etc.
 - Permite um sistema interno de mensagens para solicitar, entre outros, o estado completo do bairro.
 
 Exemplo: o operador do sistema poderá solicitar uma sincronização do seu aplicativo cliente (celular) com o estado atual do bairro. Ele envia uma mensagem:
