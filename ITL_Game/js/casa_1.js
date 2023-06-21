@@ -27,6 +27,14 @@ export default class casa_1 extends Phaser.Scene {
 
     this.player = this.physics.add.sprite(this.game.config.width / 2, this.game.config.height / 2, 'player', 17)
 
+    this.botao_0 = this.add.text(this.player.x, this.player.y + 100, '1', { fontFamily: 'Monofett' })
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.game.cliente_mqtt.publish('itl20231/casa/1', '1', {
+          qos: 1
+        })
+      })
+
     this.time.delayedCall(
       3000,
       () => {
