@@ -314,12 +314,12 @@
   "tilesets": [
     {
       "firstgid": 1,
-      "source": "..\/..\/..\/..\/TMaps\/BigTile_map.tsx"
+      "source": "BigTile_map.tsx"
     },
     {
       "columns": 17,
       "firstgid": 10001,
-      "image": "..\/..\/..\/..\/..\/..\/Downloads\/Modern_Interiors_Free_v2.2\/Modern tiles_Free\/Interiors_free\/16x16\/Room_Builder_free_16x16.png",
+      "image": "../../Tiles/Room_Builder_free_16x16.png",
       "imageheight": 368,
       "imagewidth": 272,
       "margin": 0,
@@ -332,7 +332,7 @@
     {
       "columns": 16,
       "firstgid": 10392,
-      "image": "..\/..\/..\/..\/..\/..\/Downloads\/Modern_Interiors_Free_v2.2\/Modern tiles_Free\/Interiors_free\/16x16\/Interiors_free_16x16.png",
+      "image": "../../Tiles/Interiors_free_16x16.png",
       "imageheight": 1424,
       "imagewidth": 256,
       "margin": 0,

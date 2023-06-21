@@ -15,6 +15,7 @@ export default class bairro extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 16
     })
+    this.load.image('porta', 'Assets/Player/porta.png')
 
     /* D-pad */
     this.load.image(
@@ -36,8 +37,11 @@ export default class bairro extends Phaser.Scene {
   }
 
   create () {
+    this.game.cliente_mqtt.publish('itl20231/mensagem', 'bairro', {
+      qos: 1
+    })
+
     this.speed = 250
-    this.cursors = this.input.keyboard.createCursorKeys()
 
     this.map = this.make.tilemap({ key: 'map' })
     this.Bigtile = this.map.addTilesetImage('BigTile', 'BigTile')
@@ -164,13 +168,31 @@ export default class bairro extends Phaser.Scene {
         this.player.setVelocityY(0)
       })
 
+    this.portas = [
+      {
+        numero: 1,
+        x: 632,
+        y: 340
+      }
+    ]
+    this.portas.forEach(porta => {
+      porta.objeto = this.physics.add.sprite(porta.x, porta.y, 'porta').setImmovable(true)
+      porta.objeto.numero = 'casa_' + porta.numero
+      this.physics.add.collider(this.player, porta.objeto, this.entrar_na_casa, null, this)
+    })
+
     this.cameras.main.setBounds(0, 0, 1438, 1280)
     this.cameras.main.startFollow(this.player)
   }
 
   update () {
-    if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
-      this.player.anims.play('stopped', 'true')
-    }
+    try {
+      if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) { this.player.anims.play('stopped', 'true') }
+    } catch (error) { console.log(error) }
+  }
+
+  entrar_na_casa (jogador, casa) {
+    this.game.scene.stop('bairro')
+    this.game.scene.start(casa.numero)
   }
 }

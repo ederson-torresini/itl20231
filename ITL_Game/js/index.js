@@ -1,5 +1,6 @@
 import config from './config.js'
 import bairro from './bairro.js'
+import casa_1 from './casa_1.js'
 
 class Game extends Phaser.Game {
   constructor () {
@@ -15,6 +16,7 @@ class Game extends Phaser.Game {
     // this.cliente_mqtt.on('message', (topico, mensagem) => { }
 
     this.scene.add('bairro', bairro)
+    this.scene.add('casa_1', casa_1)
     this.scene.start('bairro')
   }
 }
