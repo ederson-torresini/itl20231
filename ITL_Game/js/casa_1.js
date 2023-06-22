@@ -46,7 +46,7 @@ export default class casa_1 extends Phaser.Scene {
 
     this.map.createLayer("BellowForn", this.Interiors_Forniture, 0, 0);
     this.map.createLayer("Forniture", this.Interiors_Forniture, 0, 0);
-    this.map.createLayer("OverWalls", this.Interiors_Forniture, 256, 0);
+    this.map.createLayer("OverWalls", this.Interiors_Forniture, 0, 0);
     this.map.createLayer("Walls_transparent", this.Bigtile, 0, 0);
     this.map.createLayer("Door", this.Bigtile, 0, 0);
 
