@@ -1,5 +1,6 @@
 export default class bairro extends Phaser.Scene {
   constructor() {
+    2;
     super("bairro");
   }
 
@@ -58,20 +59,19 @@ export default class bairro extends Phaser.Scene {
 
     this.player = this.physics.add.sprite(736, 656, "player");
 
-    this.botao_0 = this.add
-      .text(this.player.x, this.player.y + 100, "1", {
-        fontFamily: "Monofett",
-      })
-      .setInteractive()
-      .on("pointerdown", () => {
-        this.game.cliente_mqtt.publish("itl20231/casa/1", "0", {
-          qos: 1,
-        });
-      });
-
     this.map.createLayer("Doors", this.Bigtile, 288, 128);
     this.map.createLayer("Windows", this.Bigtile, 288, 128);
     this.map.createLayer("OverPlayer", this.Bigtile, 32, -128);
+
+    this.tampeRect = this.add.rectangle(
+      this.cameras.main.centerX,
+      this.cameras.main.centerY,
+      2000,
+      2000,
+      0x111010
+    );
+    this.tampeRect.setDepth(1);
+    this.tampeRect.setAlpha(0);
 
     this.TerrainLayer.setCollisionByProperty({ collides: true });
     this.FencesAndTreesLayer.setCollisionByProperty({ collides: true });
@@ -222,10 +222,18 @@ export default class bairro extends Phaser.Scene {
     } catch (error) {
       console.log(error);
     }
+
+    if (this.game.fundo) {
+      this.tampeRect.setAlpha(1);
+    } else {
+      this.tampeRect.setAlpha(0);
+    }
   }
 
+
   entrar_na_casa(jogador, casa) {
-    this.game.scene.stop("bairro");
+    this.game.fundo = true;
+    this.game.scene.pause("bairro");
     this.game.scene.start(casa.numero);
   }
 }

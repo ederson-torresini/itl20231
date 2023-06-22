@@ -20,6 +20,8 @@ class Game extends Phaser.Game {
       payload = payload.toString();
     });
 
+    this.fundo = false;
+
     this.scene.add("bairro", bairro);
     this.scene.add("casa_1", casa_1);
     this.scene.start("bairro");

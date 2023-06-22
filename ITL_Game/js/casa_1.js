@@ -4,6 +4,10 @@ export default class casa_1 extends Phaser.Scene {
   }
 
   preload() {
+    this.load.script(
+      "webfont",
+      "https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"
+    );
     this.load.image(
       "Base_Interior",
       "Assets/Tiles/Room_Builder_free_16x16.png"
@@ -20,6 +24,8 @@ export default class casa_1 extends Phaser.Scene {
       frameHeight: 16,
     });
     this.load.image("computador", "Assets/Player/vazio.png");
+    this.load.image("menuI", "Assets/Tiles/UI/Menu_open.png");
+    this.load.image("exit", "Assets/Tiles/UI/transparentLight/transparentLight33.png");
 
     /* D-pad */
     this.load.image(
@@ -39,9 +45,18 @@ export default class casa_1 extends Phaser.Scene {
       "./Assets/Tiles/UI/transparentLight/transparentLight24.png"
     );
   }
-
+  
   create() {
-    this.speed = 50;
+    
+    this.Pmove = true;
+    this.speed = 70;
+
+    WebFont.load({
+      custom: {
+        families: ["Monofett"],
+        urls: ["../../../index.css"],
+      }
+    });
 
     this.map = this.make.tilemap({ key: "casa_1" });
     this.Base_Interior = this.map.addTilesetImage(
@@ -54,37 +69,37 @@ export default class casa_1 extends Phaser.Scene {
       "Interiors_Forniture"
     );
 
-    this.Base = this.map.createLayer("Base", this.Base_Interior, 0, 0);
-    this.Walls = this.map.createLayer("Walls", this.Bigtile, 0, 0);
+    this.Base = this.map.createLayer("Base", this.Base_Interior, 80, 0);
+    this.Walls = this.map.createLayer("Walls", this.Bigtile, 80, 0);
 
     this.BellowForn = this.map.createLayer(
       "BellowForn",
       this.Interiors_Forniture,
-      0,
+      80,
       0
     );
     this.Forniture = this.map.createLayer(
       "Forniture",
       this.Interiors_Forniture,
-      0,
+      80,
       0
     );
-    this.player = this.physics.add.sprite(240, 300, "player");
+    this.player = this.physics.add.sprite(370, 300, "player");
     this.OverWalls = this.map.createLayer(
       "OverWalls",
       this.Interiors_Forniture,
-      0,
+      80,
       0
     );
     this.Walls_transparent = this.map.createLayer(
       "Walls_transparent",
       this.Bigtile,
-      0,
+      80,
       0
     );
-    this.Door = this.map.createLayer("Door", this.Bigtile, 0, 0);
+    this.Door = this.map.createLayer("Door", this.Bigtile, 80, 0);
 
-    //this.Walls.setCollisionByProperty({ collides: true });
+    this.Walls.setCollisionByProperty({ collides: true });
     this.Forniture.setCollisionByProperty({ collides: true });
 
     this.physics.add.collider(this.player, this.Walls, null, null, this);
@@ -141,7 +156,7 @@ export default class casa_1 extends Phaser.Scene {
     });
 
     this.computador = this.physics.add
-      .sprite(300, 50, "computador")
+      .sprite(383, 50, "computador")
       .setImmovable(true);
 
     this.physics.add.collider(
@@ -152,57 +167,86 @@ export default class casa_1 extends Phaser.Scene {
       this
     );
 
-    this.esquerda = this.add
-      .sprite(32, 320, "esquerda")
-      .setScrollFactor(0)
-      .setScale(0.5)
-      .setInteractive()
-      .on("pointerover", () => {
-        this.player.body.setVelocityX(-this.speed);
-        this.player.anims.play("left", true);
-      })
-      .on("pointerout", () => {
-        this.player.body.setVelocityX(0);
-      });
+    this.saidaCasa = this.physics.add
+      .sprite(287, 380, "computador")
+      .setImmovable(true);
 
-    this.direita = this.add
-      .sprite(123, 320, "direita")
-      .setScrollFactor(0)
-      .setScale(0.5)
-      .setInteractive()
-      .on("pointerover", () => {
-        this.player.body.setVelocityX(this.speed);
-        this.player.anims.play("right", true);
-      })
-      .on("pointerout", () => {
-        this.player.body.setVelocityX(0);
-      });
+    this.physics.add.collider(
+      this.player,
+      this.saidaCasa,
+      this.sair_da_casa,
+      null,
+      this
+    );
+    
+        
+      
+      this.esquerda = this.add
+        .sprite(32, 320, "esquerda")
+        .setScrollFactor(0)
+        .setScale(0.5)
+        .setInteractive()
+        .on("pointerover", () => {
+          if (this.Pmove) {
+            this.player.body.setVelocityX(-this.speed);
+            this.player.anims.play("left", true);
+          }
+          
+        })
+        .on("pointerout", () => {
+          this.player.body.setVelocityX(0);
+        });
 
-    this.baixo = this.add
-      .sprite(78, 320, "baixo")
-      .setScrollFactor(0)
-      .setScale(0.5)
-      .setInteractive()
-      .on("pointerover", () => {
-        this.player.body.setVelocityY(this.speed);
-        this.player.anims.play("down", true);
-      })
-      .on("pointerout", () => {
-        this.player.body.setVelocityY(0);
-      });
+      this.direita = this.add
+        .sprite(123, 320, "direita")
+        .setScrollFactor(0)
+        .setScale(0.5)
+        .setInteractive()
+        .on("pointerover", () => {
+          if (this.Pmove) {
+            this.player.body.setVelocityX(this.speed);
+            this.player.anims.play("right", true);
+          }
+          
+        })
+        .on("pointerout", () => {
+          this.player.body.setVelocityX(0);
+        });
 
-    this.cima = this.add
-      .sprite(78, 275, "cima")
-      .setScrollFactor(0)
-      .setScale(0.5)
-      .setInteractive()
-      .on("pointerover", () => {
-        this.player.body.setVelocityY(-this.speed);
-        this.player.anims.play("up", true);
-      })
-      .on("pointerout", () => {
-        this.player.setVelocityY(0);
-      });
+      this.baixo = this.add
+        .sprite(78, 320, "baixo")
+        .setScrollFactor(0)
+        .setScale(0.5)
+        .setInteractive()
+        .on("pointerover", () => {
+          if (this.Pmove) {
+             this.player.body.setVelocityY(this.speed);
+             this.player.anims.play("down", true);
+          }
+         
+        })
+        .on("pointerout", () => {
+          this.player.body.setVelocityY(0);
+        });
+
+      this.cima = this.add
+        .sprite(78, 275, "cima")
+        .setScrollFactor(0)
+        .setScale(0.5)
+        .setInteractive()
+        .on("pointerover", () => {
+          if (this.Pmove) {
+            this.player.body.setVelocityY(-this.speed);
+            this.player.anims.play("up", true);
+          }
+
+        })
+        .on("pointerout", () => {
+          this.player.setVelocityY(0);
+        });
+    
+     this.cameras.main.setBounds(0, 0, 400, 384);
+    this.cameras.main.startFollow(this.player);
   }
 
   update() {
@@ -228,20 +272,99 @@ export default class casa_1 extends Phaser.Scene {
 
   sair_da_casa() {
     this.game.scene.stop("casa_1");
-    this.game.scene.start("bairro");
+    this.game.fundo = false;
+    this.game.scene.resume("bairro");
   }
 
   mostrar_painel() {
+    this.Pmove = false;
+    this.menuImage = this.add.image(
+      this.game.config.width / 2,
+      this.game.config.width / 2 - 190  ,
+      "menuI"
+    );
     this.botao_0 = this.add
-      .text(this.game.config.width - 100, this.player.y + 100, "1", {
+      .text(250 , 20 , "10", {
         fontFamily: "Monofett",
+        fontSize: "50px", // Definindo o tamanho da fonte para 20 pixels
       })
       .setInteractive()
       .on("pointerdown", () => {
-        this.game.cliente_mqtt.publish("itl20231/casa/1", "0", {
+        this.game.cliente_mqtt.publish("itl20231/casa/1", "10", {
           qos: 1,
         });
-        this.botao_0.destroy();
       });
+    this.botao_1 = this.add
+      .text(330, 20, "11", {
+        fontFamily: "Monofett",
+        fontSize: "50px", // Definindo o tamanho da fonte para 20 pixels
+      })
+      .setInteractive()
+      .on("pointerdown", () => {
+        this.game.cliente_mqtt.publish("itl20231/casa/1", "11", {
+          qos: 1,
+        });
+      });
+    this.botao_2 = this.add
+      .text(250, 70, "12", {
+        fontFamily: "Monofett",
+        fontSize: "50px", // Definindo o tamanho da fonte para 20 pixels
+      })
+      .setInteractive()
+      .on("pointerdown", () => {
+        this.game.cliente_mqtt.publish("itl20231/casa/1", "12", {
+          qos: 1,
+        });
+      });
+    this.botao_3 = this.add
+      .text(330, 70, "13", {
+        fontFamily: "Monofett",
+        fontSize: "50px", // Definindo o tamanho da fonte para 20 pixels
+      })
+      .setInteractive()
+      .on("pointerdown", () => {
+        this.game.cliente_mqtt.publish("itl20231/casa/1", "13", {
+          qos: 1,
+        });
+      });
+    this.botao_4 = this.add
+      .text(250, 120, "14", {
+        fontFamily: "Monofett",
+        fontSize: "50px", // Definindo o tamanho da fonte para 20 pixels
+      })
+      .setInteractive()
+      .on("pointerdown", () => {
+        this.game.cliente_mqtt.publish("itl20231/casa/1", "14", {
+          qos: 1,
+        });
+      });
+      this.botao_5 = this.add
+        .text(330, 120, "15", {
+          fontFamily: "Monofett",
+          fontSize: "50px", // Definindo o tamanho da fonte para 20 pixels
+        })
+        .setInteractive()
+        .on("pointerdown", () => {
+          this.game.cliente_mqtt.publish("itl20231/casa/1", "15", {
+            qos: 1,
+          });
+        });
+    this.botao_exit = this.add
+      .sprite(this.game.config.width / 2,
+      this.game.config.width / 2 - 100 , "exit")
+      .setScrollFactor(0)
+      .setScale(0.5)
+      .setInteractive()
+      .on("pointerdown", () => {
+        this.botao_exit.destroy();
+        this.menuImage.destroy();
+        this.botao_0.destroy();
+        this.botao_1.destroy();
+        this.botao_2.destroy();
+        this.botao_3.destroy();
+        this.botao_4.destroy();
+        this.botao_5.destroy();
+        this.Pmove = true;
+      })
   }
 }
