@@ -1,6 +1,5 @@
 export default class bairro extends Phaser.Scene {
   constructor () {
-    2
     super('bairro')
   }
 
