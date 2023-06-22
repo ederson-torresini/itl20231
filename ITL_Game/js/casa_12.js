@@ -332,13 +332,13 @@ export default class casa_12 extends Phaser.Scene {
         });
       });
       this.botao_5 = this.add
-        .text(330, 120, "125", {
+        .text(330, 120, "126", {
           fontFamily: "Monofett",
           fontSize: "50px", // Definindo o tamanho da fonte para 20 pixels
         })
         .setInteractive()
         .on("pointerdown", () => {
-          this.game.cliente_mqtt.publish("itl20231/casa/12", "5", {
+          this.game.cliente_mqtt.publish("itl20231/casa/12", "6", {
             qos: 1,
           });
         });
