@@ -15,7 +15,7 @@ export default class bairro extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 16,
     });
-    this.load.image("porta", "Assets/Player/porta.png");
+    this.load.image("porta", "Assets/Player/vazio.png");
 
     /* D-pad */
     this.load.image(
@@ -37,7 +37,7 @@ export default class bairro extends Phaser.Scene {
   }
 
   create() {
-    this.speed = 250;
+    this.speed = 150;
 
     this.map = this.make.tilemap({ key: "map" });
     this.Bigtile = this.map.addTilesetImage("BigTile", "BigTile");
@@ -130,7 +130,7 @@ export default class bairro extends Phaser.Scene {
     });
 
     this.esquerda = this.add
-      .sprite(32, 340, "esquerda")
+      .sprite(32, 320, "esquerda")
       .setScrollFactor(0)
       .setScale(0.5)
       .setInteractive()
@@ -143,7 +143,7 @@ export default class bairro extends Phaser.Scene {
       });
 
     this.direita = this.add
-      .sprite(123, 300, "direita")
+      .sprite(123, 320, "direita")
       .setScrollFactor(0)
       .setScale(0.5)
       .setInteractive()
@@ -156,7 +156,7 @@ export default class bairro extends Phaser.Scene {
       });
 
     this.baixo = this.add
-      .sprite(78, 300, "baixo")
+      .sprite(78, 320, "baixo")
       .setScrollFactor(0)
       .setScale(0.5)
       .setInteractive()
@@ -169,7 +169,7 @@ export default class bairro extends Phaser.Scene {
       });
 
     this.cima = this.add
-      .sprite(78, 255, "cima")
+      .sprite(78, 275, "cima")
       .setScrollFactor(0)
       .setScale(0.5)
       .setInteractive()
