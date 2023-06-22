@@ -130,7 +130,7 @@ export default class bairro extends Phaser.Scene {
     });
 
     this.esquerda = this.add
-      .sprite(32, 300, "esquerda")
+      .sprite(32, 340, "esquerda")
       .setScrollFactor(0)
       .setScale(0.5)
       .setInteractive()

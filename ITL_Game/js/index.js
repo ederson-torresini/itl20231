@@ -11,11 +11,10 @@ class Game extends Phaser.Game {
       this.cliente_mqtt.subscribe("itl20231/estado/#");
     });
 
-    this.pixel = false;
 
     this.scene.add("bairro", bairro);
     this.scene.add("casa_1", casa_1);
-    this.scene.start("bairro");tiles.texture.setFilterMode(Phaser.ScaleModes.NEAREST);
+    this.scene.start("bairro");
   }
 }
 
