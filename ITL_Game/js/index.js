@@ -15,7 +15,7 @@ class Game extends Phaser.Game {
 
     this.scene.add("bairro", bairro);
     this.scene.add("casa_1", casa_1);
-    this.scene.start("casa_1");
+    this.scene.start("bairro");tiles.texture.setFilterMode(Phaser.ScaleModes.NEAREST);
   }
 }
 

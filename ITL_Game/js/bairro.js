@@ -130,7 +130,7 @@ export default class bairro extends Phaser.Scene {
     });
 
     this.esquerda = this.add
-      .sprite(32, 260, "esquerda")
+      .sprite(32, 300, "esquerda")
       .setScrollFactor(0)
       .setScale(0.5)
       .setInteractive()
@@ -143,7 +143,7 @@ export default class bairro extends Phaser.Scene {
       });
 
     this.direita = this.add
-      .sprite(123, 260, "direita")
+      .sprite(123, 300, "direita")
       .setScrollFactor(0)
       .setScale(0.5)
       .setInteractive()
@@ -156,7 +156,7 @@ export default class bairro extends Phaser.Scene {
       });
 
     this.baixo = this.add
-      .sprite(78, 260, "baixo")
+      .sprite(78, 300, "baixo")
       .setScrollFactor(0)
       .setScale(0.5)
       .setInteractive()
@@ -169,7 +169,7 @@ export default class bairro extends Phaser.Scene {
       });
 
     this.cima = this.add
-      .sprite(78, 215, "cima")
+      .sprite(78, 255, "cima")
       .setScrollFactor(0)
       .setScale(0.5)
       .setInteractive()
