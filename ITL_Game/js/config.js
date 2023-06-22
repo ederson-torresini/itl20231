@@ -9,5 +9,5 @@ export default {
       debug: true,
       gravity: { y: 0 },
     },
-  }
+  },
 };
