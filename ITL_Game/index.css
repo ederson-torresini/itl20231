@@ -15,6 +15,6 @@ html {
 }
 
 @font-face {
-  font-family: Monofett;
-  src: url('./Assets/Fonts/Monofett-Regular.ttf');
+  font-family: "Monofett";
+  src: url("./Assets/Fonts/Monofett-Regular.ttf");
 }
