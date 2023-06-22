@@ -1,6 +1,6 @@
-export default class casa_9 extends Phaser.Scene {
+export default class casa9 extends Phaser.Scene {
   constructor () {
-    super('casa_9')
+    super('casa9')
   }
 
   preload () {
