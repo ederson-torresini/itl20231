@@ -10,4 +10,11 @@ export default {
       gravity: { y: 0 },
     },
   },
+  scale: {
+    mode: Phaser.Scale.FIT,
+    parent: 'game-container',
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: 640,
+    height: 360
+  }
 };
