@@ -5,13 +5,6 @@ import serial
 import paho.mqtt.client as mqtt
 import re
 
-serial_port = getenv("SERIAL_PORT", default="/dev/ttyACM0")
-serial_speed = int(getenv("SERIAL_SPEED", default="115200"))
-try:
-    microbit = serial.Serial(serial_port, int(serial_speed))
-except:
-    microbit = None
-
 
 def on_connect(client, userdata, flags, rc):
     print("Conectado ao servidor MQTT!")
@@ -29,6 +22,8 @@ def on_message(client, userdata, msg):
             print("".join([casa, payload]))
 
 
+serial_port = getenv("SERIAL_PORT", default="/dev/ttyACM0")
+serial_speed = int(getenv("SERIAL_SPEED", default="115200"))
 mqtt_broker = getenv("MQTT_BROKER", default="ifsc.digital")
 mqtt_path = getenv("MQTT_PATH", default="/ws/")
 mqtt_port = int(getenv("MQTT_PORT", default="443"))
@@ -40,11 +35,10 @@ mqtt_cliente.on_connect = on_connect
 mqtt_cliente.on_message = on_message
 
 
-def main():
+try:
+    microbit = serial.Serial(serial_port, int(serial_speed))
+except:
+    print("Micro:bit não conectado!")
+else:
     mqtt_cliente.connect(mqtt_broker, port=mqtt_port, keepalive=mqtt_keepalive)
     mqtt_cliente.loop_forever()
-
-
-if __name__ == "__main__":
-    if microbit:
-        main()
