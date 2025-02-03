@@ -248,7 +248,7 @@ export default class bairro extends Phaser.Scene {
       porta.objeto = this.physics.add
         .sprite(porta.x, porta.y, 'porta')
         .setImmovable(true)
-      porta.objeto.numero = 'casa_' + porta.numero
+      porta.objeto.numero = 'casa' + porta.numero
       this.physics.add.collider(
         this.player,
         porta.objeto,

@@ -256,7 +256,7 @@ export default class casa7 extends Phaser.Scene {
   }
 
   sair_da_casa () {
-    this.game.scene.stop('casa_7')
+    this.game.scene.stop('casa7')
     this.game.fundo = false
     this.game.scene.resume('bairro')
   }

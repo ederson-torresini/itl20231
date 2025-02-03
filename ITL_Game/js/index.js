@@ -17,12 +17,12 @@ class Game extends Phaser.Game {
   constructor () {
     super(config)
 
-    this.cliente_mqtt = mqtt.connect('wss://ifsc.digital/ws/')
+    this.cliente_mqtt = mqtt.connect('wss://itl.sj.ifsc.edu.br/mqtt/')
     this.cliente_mqtt.on('connect', () => {
       this.cliente_mqtt.subscribe('itl20231/estado/#')
     })
 
-    this.leo_mqtt = mqtt.connect('wss://ifsc.digital/ws/')
+    this.leo_mqtt = mqtt.connect('wss://itl.sj.ifsc.edu.br/mqtt/')
     this.leo_mqtt.on('connect', () => {
       this.leo_mqtt.subscribe('leojung/#')
     })
